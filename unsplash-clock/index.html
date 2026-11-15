@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsplash clock</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./script.js"></script>
+</head>
+
+<body>
+  <main>
+    <!-- スライドショー表示エリア -->
+    <section class="slideshow">
+      <div class="layer"></div>
+      <div class="layer"></div>
+      <div class="layer"></div>
+      <div class="layer"></div>
+    </section>
+    <!-- 時計表示エリア -->
+    <section class="title__container">
+      <h2 id="outPutField">00:00:00</h2>
+    </section>
+    <button class="settings-btn liquidGlass-wrapper" id="settings-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear"
+        viewBox="0 0 16 16">
+        <path
+          d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+        <path
+          d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+      </svg>
+    </button>
+    <!-- 管理パネル -->
+    <div class="settings-panel" id="settings-panel">
+      <div class="settings-header">
+        <h3 class="settings-title">設定</h3>
+        <!-- 閉じるボタン -->
+        <button class="settings-close" id="settings-close">×</button>
+      </div>
+      <!-- settings-header -->
+      <div class="settings-body liquidGlass-text">
+          <label class="settings-label" for="keywordInput">
+            <!-- label for ユーザビリティによい -->
+            検索キーワード
+          </label>
+          <p class="settings-description">
+            入力したキーワードで Unsplash から画像を取得します。<br />
+            英単語で入力してください（例：mountain / city / ocean）
+          </p>
+
+          <!-- テキスト入力欄 -->
+          <input
+            class="settings-input"
+            type="text"
+            id="keywordInput"
+            placeholder="cat"
+          />
+          <!-- 適用ボタン -->
+          <button class="settings-apply" id="applyBtn">画像を更新する</button>
+          <!-- 現在のキーワード表示 -->
+          <p class="settings-current">
+            現在のキーワード：<span id="currentKeyword">cat</span>
+            <!-- ↑ローカルストレージに保存されている -->
+          </p>
+        </div>
+    </div>
+    <!-- settings-panel -->
+    <!-- オーバーレイ（パネル背後の半透明の幕） -->
+    <div class="settings-overlay" id="settings-overlay"></div>
+  </main>
+</body>
+
+</html>

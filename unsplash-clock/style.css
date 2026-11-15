@@ -1,0 +1,306 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+/* 一番ミニマムなリセットCSS */
+
+
+.title__container {
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; */
+  /* 物をどセンターにするやり方 フレックスボックス編 */
+  display: grid;
+  place-content: center;
+  height: 100vh;
+  /* 物をどセンターにするやり方 グリッドレイアウト編*/
+  /* background-color: rgb(103, 100, 100); */
+}
+#outPutField {
+  color: #fff;
+  text-align: center;
+  /* font-size: 7.2vw; */
+  font-size: clamp(62px, calc(5.45vw + 41.58px) ,120px);
+  margin: 0;
+  line-height: 1.2;
+}
+/* ↑レスポンシブフォントサイズの話 */
+.day {
+  color: rgb(255, 255, 255, 0.6);
+  display: block;
+  font-size: 0.3em;
+  text-align: left;
+  border-left: solid 4px rgb(255, 255, 255, 0.7);
+  padding-left: 0.3em;
+}
+/* スライドショー */
+.slideshow {
+  position: fixed;
+  z-index: -1;
+  width: 100dvw;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: pink;
+}
+
+.layer {
+  position: absolute;
+  width: 100dvw;
+  height: 100dvh;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 4.5s ease;
+}
+
+.layer.show {
+  opacity: 1;
+}
+
+
+/* ==================================
+歯車ボタン
+・画面右上に固定表示(position: fixed)
+・z-indexを高くしてスライドショーの上に重ねる
+================================== */
+.settings-btn {
+  /* 画面右上に固定 */
+  position: fixed; /* スライドショーより手前 */
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  /* ボタンの見た目をリセットしてアイコンだけにする */
+  display: grid;
+  place-content: center;
+  width: 48px;
+  height: 48px;
+  /* height: 10%; */
+  /* aspect-ratio: 1 / 1;   アスペクト比 動画とかにも使える */
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  /* opacityだとアイコンそのものも半透明になってしまう */
+}
+.settings-btn:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+.settings-btn svg {
+  transition: transform 0.2s ease;
+  /* アニメーションで動きをつけている */
+}
+.settings-btn:hover > svg {
+  /* ↑「直下の」という意味 */
+  /* rotate: 120deg;   ←新しい方の書き方 */
+  transform: rotate(30deg);
+}
+
+
+
+/* ==================================
+管理パネル
+・画面右側からスライドインする
+================================== */
+.settings-panel {
+/* 画面右上に固定 */
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 300;
+  width: 320px;
+  /* ちょっと前のスマホの横幅サイズ。絶対数値を入れるのはスクリーンサイズが多い */
+  height: 100dvh;
+  /* ↑「画面いっぱいの高さ」ということ */
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  /* ↑内部のスクロールに対応（はみ出したらスクロールバーを出す） */
+  transform: translateX(100%);
+  /* ↑初期状態の管理パネル位置（画面の右外に出しておく） */
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* JSで.openクラスが付けられたらスライドインする */
+.settings-panel.open {
+  transform: translateX(0);
+  /* ↑元の位置に戻す */
+}
+
+/* --------- パネル内部のスタイル --------- */
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+
+.settings-close {
+  display: grid;
+  place-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.settings-close:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.settings-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* 子要素の間に 12px の余白 */
+}
+
+.settings-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.settings-description {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.settings-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+/* フォーカス時（入力欄をクリックしたとき）の枠線の色 */
+.settings-input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* placeholder のスタイル */
+.settings-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.settings-apply {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #111;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.settings-apply:hover {
+  background-color: #e0e0e0;
+}
+
+/* ローディング中はボタンを半透明にして操作できなくする */
+.settings-apply:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.settings-current {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.settings-current span {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+}
+
+
+
+/* =============================================
+  【追加】オーバーレイ（パネル背後の半透明の幕）
+  ・パネルが開いたとき背景に表示される
+  ・クリックするとパネルが閉じる
+  ・"open" クラスで表示 / 非表示を切り替える
+============================================= */
+
+.settings-overlay {
+  position: fixed;
+  inset: 0; /* top/right/bottom/left をすべて 0 に（= 画面全体を覆う） */
+  z-index: 200;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  /* 非表示の初期状態 */
+  opacity: 0;
+  pointer-events: none; /* クリックを受け付けない */
+
+  transition: opacity 0.3s ease;
+}
+
+/* JS が "open" クラスを付けたら表示する */
+.settings-overlay.open {
+  opacity: 1;
+  pointer-events: auto; /* クリックを受け付ける */
+}
+
+
+
+
+
+
+
+
+
+/* ↓CSSでスライドショー画像取ってくる方法
+.layer:nth-of-type(1) {
+  background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTI1MDI0fDB8MXxyYW5kb218fHx8fHx8fHwxNzk0Mjg4NjQwfA&ixlib=rb-4.1.0&q=80&w=1080');
+}
+
+.layer:nth-of-type(2) {
+  background-image: url('https://images.unsplash.com/photo-1508739773434-c26b3d09e071?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTI1MDI0fDB8MXxyYW5kb218fHx8fHx8fHwxNzk0Mjg4NjQwfA&ixlib=rb-4.1.0&q=80&w=1080');
+}
+
+.layer:nth-of-type(3) {
+  background-image: url('https://images.unsplash.com/photo-1527873722743-67759f0854aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTI1MDI0fDB8MXxyYW5kb218fHx8fHx8fHwxNzk0Mjg4NjQwfA&ixlib=rb-4.1.0&q=80&w=1080')
+}
+
+.layer:nth-of-type(4) {
+  background-image: url('https://images.unsplash.com/photo-1565118531796-763e5082d113?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTI1MDI0fDB8MXxyYW5kb218fHx8fHx8fHwxNzk0Mjg4NjQwfA&ixlib=rb-4.1.0&q=80&w=1080');
+}
+*/
