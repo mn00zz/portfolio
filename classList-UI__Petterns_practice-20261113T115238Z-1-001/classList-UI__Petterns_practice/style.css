@@ -1,0 +1,581 @@
+/* ============================================
+   classList ハンズオン用 CSS（編集不要）
+   ポイント：「is-〇〇」クラスが付いたときの見た目は
+   すべてこのファイルに書いてあります。
+   JavaScript は「クラスを付ける・外す」だけでOK！
+   ============================================ */
+
+:root {
+  --bg: #0f1117;
+  --bg-elevated: #181b24;
+  --bg-card: #1f2330;
+  --border: #2c3142;
+  --text: #e6e8ee;
+  --text-sub: #9aa1b2;
+  --accent: #6ea8fe;
+  --accent-strong: #3d8bfd;
+  --warn: #ffb86b;
+  --radius: 12px;
+  --header-h: 72px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+}
+
+body {
+  margin: 0;
+  font-family: "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+code {
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: rgba(110, 168, 254, 0.12);
+  color: var(--accent);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------
+   ヘッダー
+   -------------------------------------------- */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--header-h);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  transition: height 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+
+/* ★ 課題3：スクロールしたら付くクラス */
+.header.is-scrolled {
+  height: 56px;
+  background: rgba(24, 27, 36, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.header__logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.header__logo span {
+  color: var(--accent);
+}
+
+/* ハンバーガーボタン */
+.menu-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.menu-btn span {
+  display: block;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+}
+
+/* --------------------------------------------
+   課題1：ドロワーメニュー
+   -------------------------------------------- */
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  visibility: hidden;
+  transition: visibility 0.3s;
+}
+
+.drawer__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(320px, 85vw);
+  height: 100%;
+  padding: 80px 32px 32px;
+  background: var(--bg-elevated);
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+/* ★ 課題1：is-open が付いたら表示 */
+.drawer.is-open {
+  visibility: visible;
+}
+
+.drawer.is-open .drawer__overlay {
+  opacity: 1;
+}
+
+.drawer.is-open .drawer__panel {
+  transform: translateX(0);
+}
+
+.drawer__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.drawer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.drawer__link {
+  display: block;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+
+.drawer__link:hover {
+  color: var(--accent);
+}
+
+/* --------------------------------------------
+   メインコンテンツ
+   -------------------------------------------- */
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.hero {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: var(--header-h);
+}
+
+.hero__label {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+}
+
+.hero__title {
+  margin: 8px 0 16px;
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  line-height: 1.3;
+}
+
+.hero__lead {
+  margin: 0;
+  color: var(--text-sub);
+}
+
+.task {
+  padding: 64px 0;
+  border-top: 1px solid var(--border);
+}
+
+.task__num {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+}
+
+.task__level {
+  margin-left: 8px;
+  color: var(--warn);
+}
+
+.task__title {
+  margin: 4px 0 20px;
+  font-size: 1.6rem;
+}
+
+.task__card {
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.task__card > p:first-child {
+  margin-top: 0;
+}
+
+.checklist {
+  margin: 16px 0 0;
+  padding-left: 1.2em;
+  color: var(--text-sub);
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f1117;
+  background: var(--accent);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background: var(--accent-strong);
+}
+
+.goal {
+  margin: 0 0 160px;
+  padding: 40px 24px;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius);
+}
+
+/* --------------------------------------------
+   課題2：モーダル
+   -------------------------------------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal__content {
+  position: relative;
+  width: min(480px, 100%);
+  padding: 40px 32px 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+/* ★ 課題2：is-open が付いたら表示 */
+.modal.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal.is-open .modal__content {
+  transform: scale(1);
+}
+
+.modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.4rem;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal__title {
+  margin: 0 0 12px;
+  font-size: 1.4rem;
+}
+
+.modal__note {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  color: var(--text-sub);
+}
+
+/* ★ 発展：モーダル表示中は背景をスクロールさせない */
+body.is-locked {
+  overflow: hidden;
+}
+
+/* --------------------------------------------
+   課題3：ページトップボタン
+   -------------------------------------------- */
+.pagetop {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 90;
+  width: 52px;
+  height: 52px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0f1117;
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+/* ★ 課題3：is-show が付いたら表示 */
+.pagetop.is-show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* --------------------------------------------
+   課題4：タブ
+   -------------------------------------------- */
+.tabs {
+  margin-top: 24px;
+}
+
+.tabs__list {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+/* ★ 課題4：選択中のタブ */
+.tab.is-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tab-panel {
+  display: none;
+  padding: 20px 4px 0;
+}
+
+/* ★ 課題4：選択中のパネルだけ表示 */
+.tab-panel.is-active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-panel h3 {
+  margin: 0 0 8px;
+}
+
+.tab-panel p {
+  margin: 0;
+  color: var(--text-sub);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------
+   課題5（発展）：画像ギャラリー
+   -------------------------------------------- */
+.gallery {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.thumb {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: zoom-in;
+}
+
+.thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  transition: transform 0.3s ease, opacity 0.3s;
+}
+
+.thumb:hover img {
+  transform: scale(1.06);
+  opacity: 0.85;
+}
+
+.thumb:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------
+   課題5（発展）：ライトボックス（画像を大きく見せるモーダル）
+   -------------------------------------------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.lightbox__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  cursor: zoom-out;
+}
+
+.lightbox__content {
+  position: relative;
+  width: min(960px, 100%);
+  padding: 56px 16px 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+/* ★ 課題5：is-open が付いたら表示 */
+.lightbox.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.lightbox.is-open .lightbox__content {
+  transform: scale(1);
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.4rem;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 大きい画像（読み込み中も枠の大きさが変わらないよう比率を固定） */
+.lightbox__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 6px;
+  opacity: 0; /* 最初は透明（読み込み中は見せない） */
+}
+
+/* ★ 課題5：画像の読み込みが終わったら付くクラス
+   transition をこちらにだけ書くと、
+   ・付いたとき（表示）→ 0.3秒でふわっと表示
+   ・外れたとき（非表示）→ 一瞬で透明（前の画像が残らない） */
+.lightbox__img.is-loaded {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.lightbox__caption {
+  margin: 12px 0 0;
+  font-size: 0.95rem;
+  color: var(--text-sub);
+  text-align: center;
+}
