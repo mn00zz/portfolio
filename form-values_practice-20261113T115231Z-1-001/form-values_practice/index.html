@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>フォームの値を取得しよう | 勉強会 申込フォーム</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- defer：HTMLを読み終えてからJSを実行する（要素がまだ無い問題を防ぐ） -->
+    <script src="script.js" type="module"></script>
+  </head>
+  <body>
+    <main class="container">
+      <header class="page-header">
+        <p class="eyebrow">JavaScript ハンズオン｜フォームの値を取得しよう</p>
+        <h1>勉強会 申込フォーム</h1>
+        <p class="lead">
+          入力して「確認する」を押すと、下に入力内容が表示されます。
+        </p>
+      </header>
+
+      <form id="entry-form" class="card">
+        <!-- ① テキスト（type="text"） -->
+        <div class="field">
+          <label for="userName"
+            >お名前 <span class="required">※必須</span>
+            <span class="badge">text</span></label
+          >
+          <input
+            type="text"
+            id="userName"
+            name="userName"
+            placeholder="山田 太郎"
+            required
+          />
+        </div>
+
+        <!-- ② メール（type="email"） -->
+        <div class="field">
+          <label for="email"
+            >メールアドレス <span class="badge">email</span></label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="taro@example.com"
+          />
+        </div>
+
+        <!-- ③ 数値（type="number"） -->
+        <div class="field">
+          <label for="age">年齢 <span class="badge">number</span></label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            min="0"
+            max="120"
+            placeholder="20"
+          />
+        </div>
+
+        <!-- ④ 日付（type="date"） -->
+        <div class="field">
+          <label for="date">参加希望日 <span class="badge">date</span></label>
+          <input type="date" id="date" name="date" />
+        </div>
+
+        <!-- ⑤ セレクトボックス（select） -->
+        <div class="field">
+          <label for="course"
+            >参加コース <span class="badge">select</span></label
+          >
+          <select id="course" name="course">
+            <option value="">選択してください</option>
+            <option value="js">JavaScript基礎</option>
+            <option value="react">React入門</option>
+            <option value="three">Three.jsでゲーム制作</option>
+          </select>
+        </div>
+
+        <!-- ⑥ ラジオボタン（同じ name で1つだけ選べる） -->
+        <fieldset class="field">
+          <legend>プログラミング経験 <span class="badge">radio</span></legend>
+          <div class="choices">
+            <label
+              ><input type="radio" name="level" value="はじめて" checked />
+              はじめて</label
+            >
+            <label
+              ><input type="radio" name="level" value="少しある" />
+              少しある</label
+            >
+            <label
+              ><input type="radio" name="level" value="仕事で使っている" />
+              仕事で使っている</label
+            >
+          </div>
+        </fieldset>
+
+        <!-- ⑦ チェックボックス（同じ name で複数選べる） -->
+        <fieldset class="field">
+          <legend>
+            興味のある内容（複数選択可） <span class="badge">checkbox</span>
+          </legend>
+          <div class="choices">
+            <label
+              ><input type="checkbox" name="topics" value="DOM操作" />
+              DOM操作</label
+            >
+            <label
+              ><input type="checkbox" name="topics" value="イベント" />
+              イベント</label
+            >
+            <label
+              ><input type="checkbox" name="topics" value="フォーム" />
+              フォーム</label
+            >
+            <label
+              ><input type="checkbox" name="topics" value="API通信" />
+              API通信</label
+            >
+          </div>
+        </fieldset>
+
+        <!-- ⑧ レンジ（スライダー） -->
+        <div class="field">
+          <label for="satisfaction">
+            期待度 <span class="badge">range</span>
+            <span class="range-value"
+              ><span id="satisfaction-value">3</span> / 5</span
+            >
+          </label>
+          <input
+            type="range"
+            id="satisfaction"
+            name="satisfaction"
+            min="1"
+            max="5"
+            step="1"
+            value="3"
+          />
+        </div>
+
+        <!-- ⑨ テキストエリア（複数行） -->
+        <div class="field">
+          <label for="message"
+            >メッセージ <span class="badge">textarea</span></label
+          >
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            placeholder="講師への質問・要望など"
+          ></textarea>
+        </div>
+
+        <!-- ⑩ チェックボックス（単体：ON / OFF） -->
+        <div class="field">
+          <label class="agree">
+            <input type="checkbox" name="agree" />
+            参加規約に同意する <span class="required">※必須</span>
+            <span class="badge">checkbox（単体）</span>
+          </label>
+        </div>
+
+        <div class="actions">
+          <p id="agree-hint" class="hint">
+            ※ 参加規約に同意すると「確認する」が押せるようになります
+          </p>
+          <button type="reset" class="btn btn-ghost">リセット</button>
+          <!-- disabled：最初は押せない状態にしておく（同意したら JS で押せるようにする） -->
+          <button
+            type="submit"
+            id="submit-button"
+            class="btn btn-primary"
+            aria-describedby="agree-hint"
+            disabled
+          >
+            確認する
+          </button>
+        </div>
+      </form>
+
+      <section class="card result" aria-live="polite">
+        <h2>入力内容</h2>
+        <p id="result-empty" class="result-empty">まだ送信されていません。</p>
+        <!-- 表示欄はあらかじめ用意しておき、JS で各 dd に値を入れる。送信するまでは hidden で隠す -->
+        <dl id="result" class="result-list" hidden>
+          <dt>お名前</dt>
+          <dd id="out-userName"></dd>
+          <dt>メール</dt>
+          <dd id="out-email"></dd>
+          <dt>年齢</dt>
+          <dd id="out-age"></dd>
+          <dt>参加希望日</dt>
+          <dd id="out-date"></dd>
+          <dt>参加コース</dt>
+          <dd id="out-course"></dd>
+          <dt>経験</dt>
+          <dd id="out-level"></dd>
+          <dt>興味</dt>
+          <dd id="out-topics"></dd>
+          <dt>期待度</dt>
+          <dd id="out-satisfaction"></dd>
+          <dt>メッセージ</dt>
+          <dd id="out-message"></dd>
+          <dt>規約同意</dt>
+          <dd id="out-agree"></dd>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>
