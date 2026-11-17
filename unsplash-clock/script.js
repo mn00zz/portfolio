@@ -9,8 +9,8 @@
   2. Unsplash API 設定・画像取得関数
   3. スライドショー制御 11/10
   4. 管理画面（設定パネル）の開閉 11/13
-  5. 適用ボタンの処理 11/13(途中まで)
-  6. キーワード保存・読み込み（localStorage）
+  5. キーワード保存・読み込み（localStorage）
+  6. 適用ボタンの処理 11/13(途中まで)
   7. 初期化（ページ読み込み時に実行）
 
 ============================================= */
@@ -74,7 +74,7 @@ requestAnimationFrame(showClock);
 // 教科書p.524のfetchAPIを参照
 
 // Unsplash APIにアクセスするための認証キー
-const UNSPLASH_ACCESS_KEY = '';
+const UNSPLASH_ACCESS_KEY = 'KZilTy7Wg7VE2OWviPDXOOJajwWqMlGb8iOTtDjEYaQ';
 
 // 画像の枚数
 const IMAGE_COUNT = 4;
@@ -185,7 +185,7 @@ function applyImagesToLayers(imageUrls) {
 // setInterval()の戻り値（タイマーIDという）を保持する関数
 // あとでclearInterval(slideshowTimer)を呼ぶときに必要になる
 // nullは「タイマーがまだ動いていない」状態を表す
-let slidshowTimer = null;
+let slideshowTimer = null;
 
 async function startSlideshow(keyword) {
   // ① APIから画像URLの配列を受け取る（非同期処理）
@@ -204,12 +204,12 @@ layers[0].classList.add('show');
 // ⑤ 古いタイマーが動いていれば止める
 // clearInterval()：setIntervalで登録したタイマーをキャンセルする関数
 // nullをチェックしないと、最初の起動時にclearInterval(null)を呼ぶことになるが、実害はない（ただし明示的にチェックする方がベター）
-if(slidshowTimer !== null) {
+if(slideshowTimer !== null) {
   clearInterval(slideshowTimer);
 }
 // ⑥ 新しいタイマーをセットする
 // setInterval(fn, ms)：ミリ秒ごとにfnを繰り返し実行する
-slidshowTimer = setInterval(nextImage, 5000);
+slideshowTimer = setInterval(nextImage, 5000);
 }
 
 
@@ -251,7 +251,31 @@ settingsOverlay.addEventListener('click', closePanel);
 
 
 /**
- *　5. "画像を更新する"ボタン(適用ボタン)の処理
+ * 
+ *　5. "キーワードの保存・読み込み(localStorage)
+ * 
+ */
+const STORAGE_KEY = 'slideshowKeyword';
+
+// キーワードを保存する関数を書く
+function saveKeyword(keyword) {
+  localStorage.setItem(STORAGE_KEY, keyword);
+}
+
+// キーワードを読み込む関数を書く
+function loadKeyword() {
+  // || は、or演算子(AがないときはBが実行される)
+  // localStorage.getItemがnullを返したとき、|| の右辺のDEFAULT＿KEYWORDが使われる
+  return localStorage.getItem(STORAGE_KEY) || DEFAULT_KEYWORD;
+}
+
+
+
+
+
+
+/**
+ *　6. "画像を更新する"ボタン(適用ボタン)の処理
  * フォームから値を取得し → Unsplash APIのエンドポイントのパラメーターとして設定するために送る
  */
 
@@ -274,14 +298,29 @@ applyBtn.addEventListener('click', async() => {
   // console.log('入力されたキーワード：', keyword);
   applyBtn.disabled = true;
   applyBtn.textContent = '取得中...';
+
+// try {}
+// catch {}
+// finally {}
+
   try {
     // パネル内の「現在のキーワード：」表示を書き換える
     currentKeyword.textContent = keyword;
     // startSlideshow()に最新のキーワードを送って実行
     await startSlideshow(keyword);
+    // 成功したらキーワードをlocalStorageに保存する
+    saveKeyword(keyword);
+    // パネルを閉じる
+    closePanel();
   } catch(err) {
     alert(`画像の取得に失敗しました：${err}`);
+  } finally {
+  // finallyブロックはtry /catch どちらの結果でも必ず実行される
+  // ボタンを元に戻す
+  applyBtn.disabled = false;
+  applyBtn.textContent = "画像を取得する";
   }
+
 // p.519のtry~catch文を参照
 });
 
@@ -313,6 +352,10 @@ applyBtn.addEventListener('click', async() => {
     // applyImagesToLayers(test);
     // // 5000ms = 5秒ごとにnextUmage()を呼び出す
     // setInterval(nextImage, 5000);
+    const savedKeyword = loadKeyword();
+    // パネル内の入力欄と現在のキーワード表示を初期値で埋める
+    keywordInput.value = savedKeyword;
+    currentKeyword.textContent = savedKeyword;
     try {
       await startSlideshow(DEFAULT_KEYWORD);
     } catch(err) {
@@ -321,3 +364,4 @@ applyBtn.addEventListener('click', async() => {
   }
 
   init();
+  // ↑実行してる
